@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -48,13 +49,22 @@ namespace Roomsizer
         {
             this.InitializeComponent();
 
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(400, 350));
             ApplicationView.PreferredLaunchViewSize = new Size(400, 350);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(400, 350));
         }
 
-        private void Resize_Click(object sender, RoutedEventArgs e) {
-
+        private async void Resize_Click(object sender, RoutedEventArgs e) {
+            WorkingRoomJson["roomSettings"]["Width"] = WidthBox.Text;
+            WorkingRoomJson["roomSettings"]["Height"] = HeightBox.Text;
+            foreach(var layer in WorkingRoomJson["layers"]) {
+                if (layer["assets"] != null) {
+                    // Move assets
+                } else if (layer["instances"] != null) {
+                    // Move instances
+                }
+            }
+            await FileIO.WriteTextAsync(RoomFile, WorkingRoomJson.ToString());
         }
 
         private async void Browser_Click(object sender, RoutedEventArgs e) {
