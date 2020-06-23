@@ -55,15 +55,7 @@ namespace Roomsizer
         }
 
         private async void Resize_Click(object sender, RoutedEventArgs e) {
-            WorkingRoomJson["roomSettings"]["Width"] = WidthBox.Text;
-            WorkingRoomJson["roomSettings"]["Height"] = HeightBox.Text;
-            foreach(var layer in WorkingRoomJson["layers"]) {
-                if (layer["assets"] != null) {
-                    // Move assets
-                } else if (layer["instances"] != null) {
-                    // Move instances
-                }
-            }
+            WorkingRoomJson = RoomResizer.ResizeRoom(WorkingRoomJson, Int32.Parse(WidthBox.Text), Int32.Parse(HeightBox.Text), Anchor);
             await FileIO.WriteTextAsync(RoomFile, WorkingRoomJson.ToString());
         }
 
