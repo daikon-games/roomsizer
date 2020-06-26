@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.Storage.Search;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -48,6 +49,7 @@ namespace Roomsizer
         public MainPage()
         {
             this.InitializeComponent();
+            SetButtonsEnabled(false);
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(400, 350));
             ApplicationView.PreferredLaunchViewSize = new Size(400, 350);
@@ -57,6 +59,8 @@ namespace Roomsizer
         private async void Resize_Click(object sender, RoutedEventArgs e) {
             WorkingRoomJson = RoomResizer.ResizeRoom(WorkingRoomJson, Int32.Parse(WidthBox.Text), Int32.Parse(HeightBox.Text), Anchor);
             await FileIO.WriteTextAsync(RoomFile, WorkingRoomJson.ToString());
+            WorkingRoomJson = null;
+            SetButtonsEnabled(false);
         }
 
         private async void Browser_Click(object sender, RoutedEventArgs e) {
@@ -69,12 +73,37 @@ namespace Roomsizer
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("MostRecentRoom", file);
                 PathTextBox.Text = file.DisplayName;
                 RoomFile = file;
+                ReloadButton.IsEnabled = true;
 
-                var text = await FileIO.ReadTextAsync(file);
-                WorkingRoomJson = JObject.Parse(text);
-                WidthBox.Text = (string)WorkingRoomJson["roomSettings"]["Width"];
-                HeightBox.Text = (string)WorkingRoomJson["roomSettings"]["Height"];
+                LoadFileData();
             }
+        }
+        private void ReloadButton_Click(object sender, RoutedEventArgs e) {
+            LoadFileData();
+        }
+
+        private async void LoadFileData() {
+            var text = await FileIO.ReadTextAsync(RoomFile);
+            WorkingRoomJson = JObject.Parse(text);
+            WidthBox.Text = (string)WorkingRoomJson["roomSettings"]["Width"];
+            HeightBox.Text = (string)WorkingRoomJson["roomSettings"]["Height"];
+            SetButtonsEnabled(true);
+        }
+
+        private void SetButtonsEnabled(bool enabled) {
+            AnchorTL.IsEnabled = enabled;
+            AnchorT.IsEnabled = enabled;
+            AnchorTR.IsEnabled = enabled;
+            AnchorL.IsEnabled = enabled;
+            AnchorC.IsEnabled = enabled;
+            AnchorR.IsEnabled = enabled;
+            AnchorBL.IsEnabled = enabled;
+            AnchorB.IsEnabled = enabled;
+            AnchorBR.IsEnabled = enabled;
+
+            HeightBox.IsEnabled = enabled;
+            WidthBox.IsEnabled = enabled;
+            ResizeButton.IsEnabled = enabled;
         }
 
         private void AnchorTL_Checked(object sender, RoutedEventArgs e) {
@@ -134,5 +163,6 @@ namespace Roomsizer
             AnchorB.IsChecked = false;
             AnchorBR.IsChecked = false;
         }
+
     }
 }

@@ -11,6 +11,7 @@
     <Grid Margin="0,0,0,0">
         <TextBlock HorizontalAlignment="Left" Text="Select a Room .yy File" TextWrapping="Wrap" VerticalAlignment="Top" Margin="26,25,0,0"/>
         <Button Content="Browse" Margin="300,19,0,0" VerticalAlignment="Top" Click="Browser_Click"/>
+        <Button Name="ReloadButton" IsEnabled="False" Content="Reload" Margin="228,19,0,0" VerticalAlignment="Top" Click="ReloadButton_Click"/>
         <TextBox Name="PathTextBox" HorizontalAlignment="Left" Margin="26,55,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="341" Height="32" IsReadOnly="True"/>
         <ToggleButton Name="AnchorTL" Margin="37,103,0,0" VerticalAlignment="Top" Height="40" Width="40" IsChecked="False" Click="AnchorTL_Checked">
             <FontIcon
@@ -106,7 +107,7 @@
         <TextBox Name="HeightBox" HorizontalAlignment="Left" Margin="228,209,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="139"/>
         <TextBlock Text="Width" TextWrapping="Wrap" Margin="228,103,37,211" />
         <TextBlock Text="Height" TextWrapping="Wrap" Margin="228,180,38,134" />
-        <Button Name="ResizeButton" Content="Resize" Margin="0,274,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="327" Click="Resize_Click" Background="#FF29A0CC" Height="47"/>
+        <Button Name="ResizeButton" Background="{ThemeResource SystemAccentColor}" Content="Resize" Margin="0,274,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="327" Click="Resize_Click" Height="47" RequestedTheme="Default"/>
 
     </Grid>
 </Page>
