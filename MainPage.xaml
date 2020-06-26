@@ -112,7 +112,20 @@
         <TextBox Name="HeightBox" HorizontalAlignment="Left" Margin="228,209,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="139" TextChanged="TextChanged"/>
         <TextBlock Text="Width" TextWrapping="Wrap" Margin="228,103,37,275" />
         <TextBlock Text="Height" TextWrapping="Wrap" Margin="228,180,38,197" />
-        <Button Name="ResizeButton" Background="{ThemeResource SystemAccentColor}" Content="Resize" Margin="38,342,0,0" VerticalAlignment="Top" Width="327" Click="Resize_Click" Height="47" RequestedTheme="Default"/>
+        <Button Name="ResizeButton" Background="{ThemeResource SystemAccentColor}" Content="Resize" Margin="38,342,0,0" VerticalAlignment="Top" Width="327" Click="Resize_Click" Height="47" RequestedTheme="Default">
+            <FlyoutBase.AttachedFlyout>
+                <Flyout>
+                    <Flyout.FlyoutPresenterStyle>
+                        <Style TargetType="FlyoutPresenter">
+                            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled"/>
+                            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+                            <Setter Property="Width" Value="350"/>
+                        </Style>
+                    </Flyout.FlyoutPresenterStyle>
+                    <TextBlock Text="Set Width and Height larger than their starting values"/>
+                </Flyout>
+            </FlyoutBase.AttachedFlyout>
+        </Button>
         <CheckBox Name="TileSizeCheckbox" Content="Round up by tile size?" Margin="37,295,0,0" VerticalAlignment="Top" Click="TileSizeCheckbox_Click"/>
         <TextBlock Visibility="{Binding ElementName=TileSizeCheckbox,Path=IsChecked,Converter={StaticResource BoolToVis}}" Name="TileSizeLabel" Text="Tile Size" TextWrapping="Wrap" Margin="228,272,38,42" />
         <TextBox Visibility="{Binding ElementName=TileSizeCheckbox,Path=IsChecked,Converter={StaticResource BoolToVis}}" Name="TileSizeBox" HorizontalAlignment="Left" Margin="228,295,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="139" TextChanged="TextChanged"/>

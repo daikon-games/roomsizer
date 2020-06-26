@@ -54,16 +54,20 @@ namespace Roomsizer
             ValidateResizeAllowed();
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(400, 400));
-            ApplicationView.PreferredLaunchViewSize = new Size(400, 350);
+            ApplicationView.PreferredLaunchViewSize = new Size(400, 400);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
         }
 
         private async void Resize_Click(object sender, RoutedEventArgs e) {
             var tileSize = TileSizeCheckbox.IsChecked ?? true ? int.Parse(TileSizeBox.Text) : 1;
-            WorkingRoomJson = RoomResizer.ResizeRoom(WorkingRoomJson, Int32.Parse(WidthBox.Text), Int32.Parse(HeightBox.Text), tileSize, Anchor);
-            await FileIO.WriteTextAsync(RoomFile, WorkingRoomJson.ToString());
-            WorkingRoomJson = null;
-            SetButtonsEnabled(false);
+            try {
+                WorkingRoomJson = RoomResizer.ResizeRoom(WorkingRoomJson, Int32.Parse(WidthBox.Text), Int32.Parse(HeightBox.Text), tileSize, Anchor);
+                await FileIO.WriteTextAsync(RoomFile, WorkingRoomJson.ToString());
+                WorkingRoomJson = null;
+                SetButtonsEnabled(false);
+            } catch (ArgumentException) {
+                FlyoutBase.ShowAttachedFlyout((FrameworkElement)ResizeButton);
+            }
         }
 
         private async void Browser_Click(object sender, RoutedEventArgs e) {
