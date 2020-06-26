@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 namespace Roomsizer {
     class RoomResizer {
 
-        public static JObject ResizeRoom(JObject roomJson, int newWidth, int newHeight, MainPage.AnchorDirection anchorDirection) {
+        public static JObject ResizeRoom(JObject roomJson, int newWidth, int newHeight, int tileSize, MainPage.AnchorDirection anchorDirection) {
             int oldWidth = (int) roomJson["roomSettings"]["Width"];
-            int oldHeight = (int)roomJson["roomSettings"]["Height"];
+            int oldHeight = (int) roomJson["roomSettings"]["Height"];
+            newWidth = (int) Math.Ceiling((double) newWidth / tileSize) * tileSize;
+            newHeight = (int) Math.Ceiling((double)newHeight / tileSize) * tileSize;
             roomJson["roomSettings"]["Width"] = newWidth;
             roomJson["roomSettings"]["Height"] = newHeight;
 

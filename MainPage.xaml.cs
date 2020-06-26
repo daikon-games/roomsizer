@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -50,14 +51,16 @@ namespace Roomsizer
         {
             this.InitializeComponent();
             SetButtonsEnabled(false);
+            ValidateResizeAllowed();
 
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(400, 350));
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(400, 400));
             ApplicationView.PreferredLaunchViewSize = new Size(400, 350);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
         }
 
         private async void Resize_Click(object sender, RoutedEventArgs e) {
-            WorkingRoomJson = RoomResizer.ResizeRoom(WorkingRoomJson, Int32.Parse(WidthBox.Text), Int32.Parse(HeightBox.Text), Anchor);
+            var tileSize = TileSizeCheckbox.IsChecked ?? true ? int.Parse(TileSizeBox.Text) : 1;
+            WorkingRoomJson = RoomResizer.ResizeRoom(WorkingRoomJson, Int32.Parse(WidthBox.Text), Int32.Parse(HeightBox.Text), tileSize, Anchor);
             await FileIO.WriteTextAsync(RoomFile, WorkingRoomJson.ToString());
             WorkingRoomJson = null;
             SetButtonsEnabled(false);
@@ -82,12 +85,41 @@ namespace Roomsizer
             LoadFileData();
         }
 
+        private void ValidateResizeAllowed() {
+            int errorCount = 0;
+            if (!int.TryParse(WidthBox.Text, out int temp)) {
+                errorCount += 1;
+            } else {
+                if (temp < 0) {
+                    errorCount += 1;
+                }
+            }
+            if (!int.TryParse(HeightBox.Text, out temp)) {
+                errorCount += 1;
+            } else {
+                if (temp < 0) {
+                    errorCount += 1;
+                }
+            }
+            if (TileSizeCheckbox.IsChecked ?? true) {
+                if (!int.TryParse(TileSizeBox.Text, out temp)) {
+                    errorCount += 1;
+                } else {
+                    if (temp <= 0) {
+                        errorCount += 1;
+                    }
+                }
+            }
+            ResizeButton.IsEnabled = (errorCount == 0);
+        }
+
         private async void LoadFileData() {
             var text = await FileIO.ReadTextAsync(RoomFile);
             WorkingRoomJson = JObject.Parse(text);
             WidthBox.Text = (string)WorkingRoomJson["roomSettings"]["Width"];
             HeightBox.Text = (string)WorkingRoomJson["roomSettings"]["Height"];
             SetButtonsEnabled(true);
+            ValidateResizeAllowed();
         }
 
         private void SetButtonsEnabled(bool enabled) {
@@ -103,7 +135,6 @@ namespace Roomsizer
 
             HeightBox.IsEnabled = enabled;
             WidthBox.IsEnabled = enabled;
-            ResizeButton.IsEnabled = enabled;
         }
 
         private void AnchorTL_Checked(object sender, RoutedEventArgs e) {
@@ -164,5 +195,12 @@ namespace Roomsizer
             AnchorBR.IsChecked = false;
         }
 
+        private void TileSizeCheckbox_Click(object sender, RoutedEventArgs e) {
+            ValidateResizeAllowed();
+        }
+
+        private void TextChanged(object sender, TextChangedEventArgs e) {
+            ValidateResizeAllowed();
+        }
     }
 }

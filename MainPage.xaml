@@ -5,8 +5,13 @@
     xmlns:local="using:Roomsizer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Converters"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" d:DesignHeight="349" Width="402">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" d:DesignHeight="400" Width="400">
+
+    <Page.Resources>
+        <controls:BoolToVisibilityConverter x:Key="BoolToVis" />
+    </Page.Resources>
 
     <Grid Margin="0,0,0,0">
         <TextBlock HorizontalAlignment="Left" Text="Select a Room .yy File" TextWrapping="Wrap" VerticalAlignment="Top" Margin="26,25,0,0"/>
@@ -103,11 +108,14 @@
                 </FontIcon.RenderTransform>
             </FontIcon>
         </ToggleButton>
-        <TextBox Name="WidthBox" HorizontalAlignment="Left" Margin="228,133,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="139"/>
-        <TextBox Name="HeightBox" HorizontalAlignment="Left" Margin="228,209,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="139"/>
-        <TextBlock Text="Width" TextWrapping="Wrap" Margin="228,103,37,211" />
-        <TextBlock Text="Height" TextWrapping="Wrap" Margin="228,180,38,134" />
-        <Button Name="ResizeButton" Background="{ThemeResource SystemAccentColor}" Content="Resize" Margin="0,274,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="327" Click="Resize_Click" Height="47" RequestedTheme="Default"/>
+        <TextBox Name="WidthBox" HorizontalAlignment="Left" Margin="228,133,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="139" TextChanged="TextChanged"/>
+        <TextBox Name="HeightBox" HorizontalAlignment="Left" Margin="228,209,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="139" TextChanged="TextChanged"/>
+        <TextBlock Text="Width" TextWrapping="Wrap" Margin="228,103,37,275" />
+        <TextBlock Text="Height" TextWrapping="Wrap" Margin="228,180,38,197" />
+        <Button Name="ResizeButton" Background="{ThemeResource SystemAccentColor}" Content="Resize" Margin="38,342,0,0" VerticalAlignment="Top" Width="327" Click="Resize_Click" Height="47" RequestedTheme="Default"/>
+        <CheckBox Name="TileSizeCheckbox" Content="Round up by tile size?" Margin="37,295,0,0" VerticalAlignment="Top" Click="TileSizeCheckbox_Click"/>
+        <TextBlock Visibility="{Binding ElementName=TileSizeCheckbox,Path=IsChecked,Converter={StaticResource BoolToVis}}" Name="TileSizeLabel" Text="Tile Size" TextWrapping="Wrap" Margin="228,272,38,42" />
+        <TextBox Visibility="{Binding ElementName=TileSizeCheckbox,Path=IsChecked,Converter={StaticResource BoolToVis}}" Name="TileSizeBox" HorizontalAlignment="Left" Margin="228,295,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="139" TextChanged="TextChanged"/>
 
     </Grid>
 </Page>
