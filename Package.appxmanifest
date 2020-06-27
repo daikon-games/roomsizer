@@ -8,7 +8,7 @@
 
   <Identity
     Name="2b18a6e4-8e9a-445e-a7c4-908a76aabd86"
-    Publisher="CN=nickavv"
+    Publisher="CN=daikon-games"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="2b18a6e4-8e9a-445e-a7c4-908a76aabd86" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
@@ -48,8 +48,4 @@
       </uap:VisualElements>
     </Application>
   </Applications>
-
-  <Capabilities>
-    <Capability Name="internetClient" />
-  </Capabilities>
 </Package>
