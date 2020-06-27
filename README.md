@@ -14,6 +14,11 @@ If you are going to use Roomsizer **PLEASE** make sure you have a backup of your
 
 There will be an effort to keep Roomsizer working on newer versions of GameMaker as they are released, but don't be careless with your valuable room data!
 
+## KNOWN ISSUES
+[Issue #2](https://github.com/daikon-games/roomsizer/issues/2) - If you have tile layers and instance/asset layers, and you resize the room to a number of pixels that is not a multiple of your tile size, your instances/assets will not move the same amount as your tiles do. To avoid this, check the "Round up by tile size?" box, and type in your tile size in pixels
+
+[Issue #3](https://github.com/daikon-games/roomsizer/issues/3) - This is more of a bug in GameMaker than in Roomsizer, but if the last thing you did in your room was edit tile placement GameMaker will NOT save your changes (even though it says it did)! That means if you edit a tile layer, save, and then use Roomsizer, Roomsizer will not know about your most recent tile changes and therefore will overwrite them. To be safe, always edit something else about the room last (instance/asset placement, room properties, etc), and then save. And to be extra safe, please back up your rooms before using Roomsizer!
+
 ## Get Roomsizer
 Roomsizer is written for Windows 10 build 1809 and later.
 
